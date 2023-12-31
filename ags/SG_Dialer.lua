@@ -180,7 +180,7 @@ end
 
 function IrisConfig(options)
   if type(options.IDC) == "number" and options.IDC >= 0 and options.IDC < 1e9 and math.floor(options.IDC) == options.IDC then
-    IDC = options.IDC
+    IDC = tostring(options.IDC)
   elseif options.IDC == nil then
     io.stderr:write("No IDC Provided\n")
   else
@@ -900,7 +900,7 @@ ConfigPage.changeIDCButton = Button.new(65, 46, 0, 0, "         ", function()
       newIDC = tonumber(newIDC)
       if type(newIDC) == "number" and newIDC >= 0 and newIDC < 1e9 and math.floor(newIDC) == newIDC then
         alert("IDC Has Been Changed", 1)
-        IDC = newIDC
+        IDC = tostring(newIDC)
         writeConfig()
       else
         alert("Invalid IDC", 2)
@@ -2778,7 +2778,7 @@ local EventListeners = {
         event.timer(1.5, function()
           alert("Sending IDC",1)
           os.sleep(0.5)
-          sg.sendIrisCode(OutgoingIDC)
+          sg.sendIrisCode(tostring(OutgoingIDC))
         end)
       end
     end, debug.traceback)
@@ -2869,7 +2869,7 @@ local EventListeners = {
 
   modem_message = event.listen("modem_message", function(_, _, sender, port, _, msg)
     if port == ModemIDCPort and tonumber(msg) ~= nil then
-      local code = tonumber(msg)
+      local code = tostring(msg)
       if IDC == code then
         if sg.getIrisState() == "CLOSED" then
           sg.toggleIris()
